@@ -1,0 +1,81 @@
+main.default {
+    background-color: none !important;
+}
+main.default .background {
+    padding: 2rem 7rem;
+    min-height: calc(100vh - 7rem);
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    color: var(--light-text);
+}
+main.default .background .login-form, main.default .background .register-form {
+    flex: 0 1 550px;
+    padding: 2rem;
+    border-radius: 2rem;
+    min-height: 300px;
+    max-width: 450px;
+    background-color: rgba(var(--main-color-rgb), 0.95);
+}
+.background .login-form h1, .background .register-form h1 {
+    font-size: 4rem;
+    text-align: center;
+}
+.background .login-form hr{
+    height: 0.3rem;
+    background-color: var(--light-text);
+    margin-bottom: 3.5rem;
+}
+.background .register-form hr {
+    height: 0.3rem;
+    background-color: var(--light-text);
+}
+.background .register-form .description {
+    background-color: var(--bg-red);
+    color: var(--main-color);
+    font-size: 1.5rem;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0 2rem;
+    font-style: italic;
+    border-radius: 1.5rem;
+    font-weight: 700;
+    opacity: 1;
+}
+.background .login-form form {
+    gap: 1rem;
+}
+.background .login-form form .info {
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    padding: 0 1rem;
+}
+.background .register-form hr {
+    margin-bottom: 1rem;
+}
+.background .register-form form {
+    gap: 1.2rem;
+}
+.background .register-form form .info {
+    flex-wrap: wrap;
+}
+.background .login-form form label {
+    flex-shrink: 1;
+}
+.background .login-form form input, .background .register-form form input {
+    background-color: var(--light-text);
+    flex-basis: 4rem;
+    width: 100%;
+    max-width: 100%;
+}
+.background .register-form form input {
+    height: 3.5rem;
+}
+.background .login-form form button, .background .register-form form button {
+    margin: 3rem auto 0;
+    height: 4rem;
+    width: 15rem;
+    font-size: 1.8rem;
+    background-color: var(--pale-yellow);
+    color: var(--main-color);
+}

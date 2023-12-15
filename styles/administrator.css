@@ -1,0 +1,210 @@
+/* Left Side Nav Bar */
+
+.left-side-navbar {
+    background-color: var(--main-color);
+    display: flex;
+    width: 300px;
+    max-width: 300px;
+    color: var(--light-text);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    /* bottom: 0; */
+    height: auto;
+    /* height: 110vh; */
+    overflow-y: auto;
+    z-index: 1000;
+}
+.navbar-container::-webkit-scrollbar {
+    width: 5px; 
+}
+.navbar-container::-webkit-scrollbar-thumb {
+    background-color: #888; /* Change the color of the scrollbar thumb */
+  }
+.left-side-navbar .navbar-container {
+    display: flex;
+    align-items: start;
+    flex-direction: column; 
+    padding: 2rem;
+    gap: 2.5rem;
+    width: 100%;
+    overflow-y: auto;
+}
+.left-side-navbar .navbar-container * {
+    flex-shrink: 0;
+}
+
+.left-side-navbar * {
+    overflow-y: hidden;
+}
+.left-side-navbar .admin-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    height: auto;
+}
+#admin-profile {
+    border: 0.1rem solid var(--pale-yellow);
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.admin-card h2{
+    font-weight: 500;
+    font-size: 2rem;
+    color: var(--pale-yellow);
+}
+.left-side-navbar .nav-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    font-size: 1.2rem;
+}
+.left-side-navbar .nav-container .nav-name:hover, .left-side-navbar .nav-name:hover{
+    color: var(--pale-yellow);
+}
+.nav-container .nav, .left-side-navbar .nav {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.5rem;
+    max-width: 250px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    overflow: hidden;
+    flex-shrink: 0;
+    min-height: 4rem; 
+    position: relative;
+    z-index: 1001;
+}
+.left-side-navbar .nav .notification {
+    background-color: var(--c-red-color);
+    color: var(--light-text);
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    border-radius: 50%;
+    margin-left: auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0.5rem;
+    z-index: 1002;
+}
+
+.nav-container .nav.active, .left-side-navbar .nav.active {
+    background-color: rgba(var(--light-background-rgb), 0.2);
+    color: var(--pale-yellow);
+}
+.nav-container .nav .nav-logo, .left-side-navbar .nav .nav-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-container .nav .nav-logo .logo, .left-side-navbar .nav .nav-logo .logo {
+    border-radius: 0.2rem;
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+}
+.left-side-navbar .nav .nav-logo .logo.setting-logo {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+.left-side-navbar .navbar-container .logout, .left-side-navbar .navbar-container .settings {
+    max-height: 40px;
+    gap: 1.5rem;
+}
+.left-side-navbar .navbar-container .logout {
+    margin-top: -1.5rem;
+}
+main .section.admin {
+    width: 100%;
+    min-height: 100vh;
+    padding: 1rem 2rem;
+    background-color: var(--light-background);
+    font-size: 1.6rem;
+    color: var(--main-color);
+    font-weight: 600;
+}
+
+@media screen and (max-width: 1200px)  {
+    .left-side-navbar {
+        display: flex;
+        width: 85px;
+        height: auto;
+        /* height: 110vh; */
+        overflow-y: auto;
+        z-index: 1000;
+    }
+    .navbar-container {
+        padding: 1.3rem 0.8rem !important;
+        align-items: center;
+        gap: 2rem !important;
+    }
+    .navbar-container div, .navbar-container div .profile, .navbar-container a {
+        display: flex;
+        flex-direction: column;
+        align-items: center !important;
+        justify-content: center;
+        text-align: center;
+    }
+    .navbar-container div.admin-card {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+    .navbar-container div .profile img {
+        display: flex;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: auto
+    }
+    .navbar-container div .text {
+        font-size: 0.8rem;
+        color: var(--pale-yellow);
+        
+    }
+    .nav.settings {
+        margin-bottom: 1rem;
+    }
+    .nav .notification {
+        width: 1.8rem !important;
+        height: 1.8rem !important;
+        padding: 0.2rem;
+        font-size: 0.5rem;
+        border-radius: 50%;
+        right: 1.1rem !important;
+        top: 0.2rem !important;
+        z-index: 2005 !important;
+        top: -0.3rem;
+    }
+    .nav-name {
+        display: none;
+    }
+    header.admin, main.admin, footer.admin {
+        padding-left: 85px;
+    }
+    .small-text {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    header .content, footer .content {
+        padding: 0.2rem 1.5rem !important;
+    }
+    main .background {
+        padding: 2rem 1.5rem;
+        justify-content: center !important;
+    }
+}

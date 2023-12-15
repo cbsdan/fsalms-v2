@@ -1,0 +1,128 @@
+/* 
+    /////////////////////////
+    SECTION
+    /////////////////////////
+*/
+main .section.user {
+    min-height: 100vh;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 10rem;
+    font-size: 1.6rem;
+    color: var(--main-color);
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+main .section.user .background {
+    min-height: 50vh;
+    background-color: var(--light-background);
+    padding: 1rem 2rem 2rem;
+}
+.navigation-container .nav {
+    color: var(--light-text);
+}
+.navigation-container .nav.active {
+    color: var(--gold);
+}
+
+/*---------------------------------------*/
+main .section.user h1 {
+    color: var(--main-color);
+    margin-bottom: 0.5rem;
+    font-size: 3.0rem;
+}
+
+/* Info Section PHP*/
+.section hr {
+    border: none;
+    height: 0.2rem;
+    background-color: var(--main-color);
+}
+
+.section.user .content {
+    margin: 1rem 0 2rem;
+
+}
+
+.user-info .content .details .info {
+    display: flex;
+    font-size: 1.6rem;
+}
+.user-info .content .details .info span.label {
+    flex: 0 1 15rem;
+}
+.user-info .content .details .info span.value {
+    flex: 3;
+    font-weight: 700;
+}
+
+/* .section.user .savings-container,  .section .loan-container, .section .request-container, .section .record-container, .section .edit-container, .section .password-container {
+} */
+.section.user .savings-container .details, .section .loan-container .details, .section .request-container form, .section .record-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
+.section .request-container form div {
+    display: flex;
+    align-items: center;
+}
+.section .request-container form div label {
+    width: 170px;
+}
+.section .request-container form div input {
+    flex: 1;
+    max-width: 300px;
+}
+
+.section .record-container {
+    background-color: var(--input-box-background);
+}
+
+/*Transactions Section*/
+.section #transac-type {
+    display: flex;
+    margin: 0 0 0.5rem;
+    margin-left: auto;
+    background-color: var(--input-box-background);
+    padding: 0.5rem 1rem;
+}
+.section .transactions-container .transactions-table {
+    background-color: var(--input-box-background);
+}
+
+/*Edit Section and Change Password Section*/
+.section .edit-container form, .section .password-container form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+.section .edit-container form .info .input-name-container input {
+    max-width: calc(140px - 0.25rem);
+}
+.section .edit-container form .info .sex-radio-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+    max-width: 200px;
+}
+#edit-btn, #pw-change-btn {
+    margin-top: 1rem;
+}
+
+.not-verified-label {
+    margin-top: 3rem;
+}
+
+@media only screen and (max-width: 840px) {
+    .user-info .content .details .info span.value {
+        flex: 2;
+    }
+  }

@@ -1,0 +1,27 @@
+:root {
+    --main-color: #2C3E50;
+    --light-main-color-rgb: 182, 219, 255;
+    --main-color-rgb: 44, 62, 80;
+    --gold: #F1C40F;
+    --pale-yellow: #FBE3B1;
+    --pale-yellow-rgb: 251, 227, 176;
+    --light-text: #EFEFEF;
+    --gray-text-rgb: 122, 122, 122;
+    --dark-text: #1A1A1A;
+    --main-background: #FFF3E0;
+    --light-background: #EDEDED;
+    --light-background-rgb: 237, 237, 237;
+    --input-box-background: #D9D9D9;
+    --bg-green: #90EE90;
+    --bg-red: #F08080;
+    --c-green-color: #006400;
+    --c-red-color: #8B0000;
+    --c-light-red: #FF7F7F;
+    --c-light-green: #90EE90;
+    --c-blue: #6495ED;
+
+    --max-width: 1400px;
+    --content-max-width: 1200px;
+    --opacity: 0.7; 
+    
+}

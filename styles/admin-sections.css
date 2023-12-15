@@ -1,0 +1,361 @@
+/* Dashboard Overview */
+#greet-card {
+    background-color: var(--pale-yellow);
+    padding: 2rem 3rem;
+    border-radius: 2rem;
+}
+#greet-card h1 {
+    margin-bottom: 1rem;
+}
+
+.section.admin .content-title {
+    font-size: 2.4rem;
+    margin-top: 1.5rem;
+}
+.section.admin hr {
+    margin-bottom: 1.5rem;
+}
+
+.overview {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.overview-card {
+    background-color: rgb(var(--light-main-color-rgb), 0.8);
+    flex: 0 0 calc(50% - 0.5rem);
+    border-radius: 2rem;
+}
+.overview-card:last-child {
+    margin-right: auto; 
+}
+.overview-card .card-header {
+    background-color: var(--gold);
+    font-size: 1.6rem;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+}
+.overview-card .card-header p {
+    font-size: 2.2rem;
+}
+.card-body .label {
+    font-size: 2rem;
+}
+   
+.card-body .data {
+    font-size: 3rem;
+}
+   
+.overview-card .card-body {
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+}
+
+.overview-card .card-body .information {
+    margin-bottom: 0.3rem;
+}
+.overview-card .card-body .information .label {
+    font-weight: 700;
+    color: rgba(var(--main-color-rgb), 0.7);
+}
+.overview-card .card-body .information .data{
+    margin-left: 2rem;
+}
+.overview-card .card-body .information .data .detail{
+    font-size: 2.2rem;
+}
+.overview-card .card-body .information .data .smaller{
+    font-size: 1.6rem;
+}
+
+
+/* Member Information */
+.member-information {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.member-information .section {
+    flex: 1 0 500px;
+    min-width: 250px;
+    flex-wrap: wrap;
+}
+.search-section {
+    display: flex !important;
+    gap: 1rem !important;
+    flex: 1 !important;
+    margin-bottom: 1rem !important;
+}
+.search-section input {
+    height: 4rem !important; 
+    flex: 2 !important;
+}
+.search-section select {
+    flex: 1 !important;
+}
+.left-section .result {
+    display: flex !important;
+    flex: 1 !important;
+}
+table td.profile-img {
+    text-align: center;
+    border:none;
+    border-bottom: 1px solid var(--main-color);
+}
+
+.member-information-section {
+    background-color: var(--input-box-background);
+}
+.member-information .right-section,.inner-section .right:first-child{
+    position: relative;
+    max-width: 350px;
+    height: 450px;
+    flex: 1;
+    min-width: 250px;
+} 
+
+.right-section .member-body, .right .member-body {
+    padding: 0 1rem 1rem;
+}
+.right-section .member-body hr {
+    height: 0.1rem;
+}
+
+.member-header .title{
+    padding: 0.5rem 1rem;
+    background-color: rgb(var(--light-main-color-rgb));
+    text-align: center;
+    font-size: 1.7rem;
+    font-weight: 700;
+}
+.member-header .content {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.member-header .content .left {
+    flex-shrink: 0;
+}
+.member-header .content img {
+    border-radius: 50%;
+    border: 1px solid var(--main-color);
+}
+.member-header .content .right p.name{
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+.member-header .content .right .other-info {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 1.2rem;
+    column-gap: 0.5rem;
+}
+.member-header .content .right .other-info .data {
+    display: flex;
+    flex-wrap: nowrap;
+}
+.member-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.member-body .info .label {
+    font-weight: 700;
+}
+.member-body .info .data {
+    font-size: 1.8rem;
+    margin-left: 2rem;
+}
+.member-footer {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(var(--light-main-color-rgb));
+    padding: 0 1rem 1rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%
+}
+.member-footer .title {
+    text-align: center;
+    font-weight: 700;
+    padding: 0.5rem 0;
+}
+.member-footer .content {
+    font-size: 1.4rem;
+}
+.member-footer .content .info .label {
+    font-weight: 700;
+}
+.member-footer hr {
+    height: 0.1rem;
+    margin-bottom: 0.4rem !important;
+}
+
+
+/* Member Transactions */
+.member-transactions .search-section {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.transaction-table {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+}
+.transaction-table select.options {
+    display: block;
+    margin-left: auto;
+}
+
+.transaction-table .result-table {
+    flex: 1;
+    width: 100%;
+}
+
+/* Savings Deposit */
+.savings-deposit, .pay-loan, .make-loan {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.savings-deposit .section h3.title, .pay-loan .section h3.title, .make-loan .section h3.title{
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    margin-bottom: 1.5rem;
+    height: 4rem;
+    min-width: 100px;
+    max-width: 300px;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color: var(--pale-yellow);
+}
+.second.section .content{
+    max-width: 500px;
+    min-width: 300px;
+    width: 70%;
+}
+.first.section .inner-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: relative;
+}
+.inner-section .left-section {
+    flex:1 0 500px;
+    /* display: flex;
+    flex-shrink: 0;
+    align-items: start;
+    flex-direction: column;
+    gap: 1rem; */
+}
+.inner-section .right-section {
+    max-width: 350px;
+    min-width: 250px;
+    flex: 1;
+    height: 450px;
+}
+.inner-section .right-section .member-footer {
+    max-width: 350px;
+}
+.inner-section .left-section .search-section {
+    flex-shrink: 0;
+    height: 5rem;
+}
+.inner-section .left .result {
+    display: flex;
+}
+.inner-section .left .result table {
+    flex: 1;
+}
+.second.section form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Loan Requests */
+.loan-requests {
+    margin-bottom: 2rem;
+}
+#loan-requests-total-select {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.loan-details {
+    max-width: 600px !important;
+    width: 100% !important;
+    padding: 2rem;
+    border-radius: 2rem;
+}
+
+/* Add Member */
+.section .add-member, .section .edit-member, .section .edit-transaction {
+    background-color: rgba(var(--light-main-color-rgb), 0.5);
+    padding: 2rem;
+    border-radius: 2rem;
+}
+.add-member .input-name-container, .edit-member .input-name-container {
+    display: flex;
+    gap: 0.5rem !important;
+}
+.add-member .input-name-container input {
+    flex: 1 1 var(50% - 2rem);
+}
+
+/* Edit Member and Edit Transaction*/
+.select-member, .select-transaction {
+    margin-bottom: 3rem;
+}
+.edit-member .title, .edit-transaction .title {
+    margin-bottom: 0.5rem;
+}
+.edit-member hr, .edit-transaction hr {
+    margin-bottom: 2rem;
+}
+
+.select-member .search-section .search-input, .select-transaction .search-section .search-input {
+    flex: 1;
+}
+/* Edit Transaction */
+#transaction-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+#transaction-container select {
+    height: 4rem;
+    flex-shrink: 0;
+    margin-left: auto;
+    max-width: 163.75px;
+    width: 100%;
+    min-width: 50px;
+}
+#transaction-type {
+    margin-left: auto;
+    margin-bottom: 1rem;
+}
+/* Settings */
+.reset-title, .password-title {
+    margin-top: 3.5rem;
+}
+.reset-container .description {
+    font-style: italic;
+}
+@media screen and (min-width: 1200px){
+    .overview-card {
+        background-color: rgb(var(--light-main-color-rgb), 0.8);
+        flex: 0 0 calc(33% - 0.4rem);
+        border-radius: 2rem;
+    }
+}
