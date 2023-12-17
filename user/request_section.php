@@ -131,7 +131,7 @@ $memId = $result['mem_id'];
             echo '</tr>';
         }
     } else {
-        echo "<tr class='text-center'><td colspan='7'>No record to show</td></tr>";
+        echo "<tr class='text-center'><td colspan='9'>No record to show</td></tr>";
     }
 
         ?>

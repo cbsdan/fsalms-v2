@@ -70,8 +70,13 @@ $isThereMember = false;
                     <div class="search-section">
                         <input class="search-input" type="text" class="search-input" placeholder="Search here" name="search-value">
                         <select class="options select-input" name="search-type">
-                            <option value="mem_id" class="option" <?php if ($searchType == 'mem_id') echo "selected"?>>ID</option>
+                            <option value="mem_id" class="option" <?php if ($searchType == 'mem_id') ?>>ID</option>
                             <option value="name" class="option" <?php if ($searchType == 'name') echo "selected"?>>Name</option>
+                        </select> 
+                        <select class="options select-input" name="member-status">
+                            <option value="all" class="option" <?php if ($searchType == 'mem_id') echo "selected"?>>All</option>
+                            <option value="regular" class="option" <?php if ($searchType == 'name') ?>>Regular</option>
+                            <option value="non-regular" class="option" <?php if ($searchType == 'name') ?>>Non-Regular</option>
                         </select> 
                         <input type="submit" class="hidden" name="search" value="search">
                     </div>

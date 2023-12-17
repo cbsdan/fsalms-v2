@@ -92,7 +92,7 @@
 }
 .search-section input {
     height: 4rem !important; 
-    flex: 2 !important;
+    flex: 3 !important;
 }
 .search-section select {
     flex: 1 !important;

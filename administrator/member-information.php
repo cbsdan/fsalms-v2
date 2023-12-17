@@ -190,7 +190,7 @@ $isThereMember = false;
             <div class="info">
                 <p class="label">Total Savings: </p>
                 <p class="data">
-                    <span class="detail">₱<?php echo getTotalDeposits($conn, $memId); ?></span>
+                    <span class="detail">₱<?php echo getTotalDeposits($conn, $memInfo['mem_id']); ?></span>
                 </p>
             </div>
             <div class="info">
