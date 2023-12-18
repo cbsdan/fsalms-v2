@@ -133,13 +133,13 @@ $memId = $result['mem_id'];
                     <p class='" . ($row['request_status'] != 'Pending' ? '' : 'hidden') . "'>N/A</p>
                     <form action='./database/cancel-loan-request.php' method='POST' class='" . ($row['request_status'] == 'Pending' ? '' : 'hidden') . "'>
                         <input type='hidden' name='loan_detail_id' value='". $row['loan_detail_id'] . "'>
-                        <button class='bg-red' type='submit' name='submit' value='submit'>Cancel</button>
+                        <button id='cancel-btn' class='bg-red' type='submit' name='submit' value='submit'>Cancel</button>
                     </form>
                   </td>";   
             echo '</tr>';
         }
     } else {
-        echo "<tr class='text-center'><td colspan='9'>No record to show</td></tr>";
+        echo "<tr class='text-center'><td colspan='10'>No record to show</td></tr>";
     }
 
         ?>

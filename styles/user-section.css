@@ -134,6 +134,12 @@ main.user #user-name {
 main.user #user-name .label {
     flex-shrink: 0;
 }
+.details p .value {
+    padding: 0 0.5rem;
+}
+#cancel-btn {
+    margin-top: 0 !important;
+}
 @media only screen and (max-width: 840px) {
     .user-info .content .details .info span.value {
         flex: 2;
