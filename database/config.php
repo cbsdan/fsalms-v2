@@ -4,7 +4,7 @@
 $servername = "localhost"; // Database host
 $username = "root"; // Database username
 $password = ""; // Database password
-$database = "proj_fsalms_7"; // Database name
+$database = "proj_fsalms"; // Database name
 $port = 3306; 
 
 // Create connection
