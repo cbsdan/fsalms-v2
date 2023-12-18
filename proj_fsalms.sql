@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2023 at 03:01 PM
+-- Generation Time: Dec 18, 2023 at 05:10 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `proj_fsalms`
+-- Database: `proj_fsalms_7`
 --
 
 -- --------------------------------------------------------
@@ -104,10 +104,12 @@ CREATE TABLE `members` (
   `mem_id` int(6) UNSIGNED ZEROFILL NOT NULL,
   `fname` varchar(45) NOT NULL,
   `lname` varchar(45) NOT NULL,
+  `is_temp_mem` tinyint(1) NOT NULL DEFAULT 0,
   `sex` varchar(6) NOT NULL,
   `birthdate` date DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
   `contact` varchar(12) DEFAULT NULL,
+  `status` varchar(11) NOT NULL DEFAULT 'Regular',
   `date_added` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

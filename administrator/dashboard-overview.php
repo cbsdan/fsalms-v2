@@ -93,7 +93,7 @@ if (file_exists($function_path)) {
             <div class="information">
                 <p class="label">Total Deposit: </p>
                 <p class="data">
-                    <span class="detail">P <?php echo getTotalSavings($conn); ?></span>
+                    <span class="detail">P <?php echo number_format(getTotalSavings($conn), 2); ?></span>
                 </p>
             </div>
             <div class="information">
@@ -170,7 +170,7 @@ if (file_exists($function_path)) {
             <div class="information">
                 <p class="label">Total Interest: </p>
                 <p class="data">
-                    <span class="detail">P <?php echo  $interests = getTotalInterest($conn); ?></span>
+                    <span class="detail">P <?php echo  number_format($interests = getTotalInterest($conn), 2); ?></span>
                 </p>
             </div>
             <div class="information">

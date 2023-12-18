@@ -34,21 +34,21 @@
     
     //DEFAULT SQL COMMAND, IF ADMIN DOESN'T SEARCH AND FILTER ACTIVITY
     $sql = "SELECT * FROM (
-                SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, d.deposited AS amount, d.deposit_timestamp AS date
+                SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, d.deposited AS amount, d.deposit_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN deposit d ON d.mem_id = a.mem_id
     
                 UNION 
     
-                SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, lp.payment_amount AS amount, lp.payment_timestamp AS date
+                SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem,lp.payment_amount AS amount, lp.payment_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN loan_payment lp ON lp.mem_id = m.mem_id
     
                 UNION 
     
-                SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, ld.loan_amount AS amount, lr.claimed_timestamp AS date
+                SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name,m.is_temp_mem, ld.loan_amount AS amount, lr.claimed_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN loan_requests lr ON lr.mem_id = m.mem_id
@@ -67,21 +67,21 @@
         if ($activity != null) {
             //If admin want to filter record whether it is approved or declined, this will be the query:
             $sql = "SELECT * FROM (
-                SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, d.deposited AS amount, d.deposit_timestamp AS date
+                SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, d.deposited AS amount, d.deposit_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN deposit d ON d.mem_id = a.mem_id
     
                 UNION 
     
-                SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, lp.payment_amount AS amount, lp.payment_timestamp AS date
+                SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, lp.payment_amount AS amount, lp.payment_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN loan_payment lp ON lp.mem_id = m.mem_id
     
                 UNION 
     
-                SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, ld.loan_amount AS amount, lr.claimed_timestamp AS date
+                SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, ld.loan_amount AS amount, lr.claimed_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN loan_requests lr ON lr.mem_id = m.mem_id
@@ -101,21 +101,21 @@
         if ($searchValue != '') {
             //searchtype is name
             $sql = "SELECT * FROM (
-                SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, d.deposited AS amount, d.deposit_timestamp AS date
+                SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, d.deposited AS amount, d.deposit_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN deposit d ON d.mem_id = a.mem_id
     
                 UNION 
     
-                SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, lp.payment_amount AS amount, lp.payment_timestamp AS date
+                SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, lp.payment_amount AS amount, lp.payment_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN loan_payment lp ON lp.mem_id = m.mem_id
     
                 UNION 
     
-                SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, ld.loan_amount AS amount, lr.claimed_timestamp AS date
+                SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, ld.loan_amount AS amount, lr.claimed_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN loan_requests lr ON lr.mem_id = m.mem_id
@@ -135,21 +135,21 @@
     
         if ($searchValue != '' && $activity != null) {
             $sql = "SELECT * FROM (
-                SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, d.deposited AS amount, d.deposit_timestamp AS date
+                SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, d.deposited AS amount, d.deposit_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN deposit d ON d.mem_id = a.mem_id
     
                 UNION 
     
-                SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, lp.payment_amount AS amount, lp.payment_timestamp AS date
+                SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, lp.payment_amount AS amount, lp.payment_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN loan_payment lp ON lp.mem_id = m.mem_id
     
                 UNION 
     
-                SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, ld.loan_amount AS amount, lr.claimed_timestamp AS date
+                SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, ld.loan_amount AS amount, lr.claimed_timestamp AS date
                 FROM members m 
                 INNER JOIN accounts a ON a.mem_id = m.mem_id 
                 INNER JOIN loan_requests lr ON lr.mem_id = m.mem_id
@@ -200,6 +200,7 @@
                     <th>Type</th>
                     <th>Member ID</th>
                     <th>Name</th>
+                    <th>Member Type</th>
                     <th>Amount</th>
                     <th>Date</th> 
                     <th>Edit</th> 
@@ -216,11 +217,18 @@
                                 $profileSrc = "./img/default-profile.png";
                             }
 
+                            if ($transaction['is_temp_mem'] == 0 || $transaction['is_temp_mem'] == false ) {
+                                $member_type = 'Member';
+                            } else {
+                                $member_type = 'Temporary';
+                            }
+
                             echo "<tr>
                                     <td><img class='m-auto' src='" . $profileSrc . "'></td>
                                     <td>" . $transaction['activity'] . "</td>
                                     <td>" . $transaction['mem_id'] . "</td>
                                     <td>" . $transaction['name'] . "</td>
+                                    <td class='text-center'>" . $member_type . "</td>
                                     <td>₱" . $transaction['amount'] . "</td>
                                     <td>" . $transaction['date'] . "</td>
                                     <td>

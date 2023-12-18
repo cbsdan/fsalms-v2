@@ -82,6 +82,8 @@
                 query($sql);
             }
             
+            updateMemberStatus($conn);
+            
             $_SESSION['message'] = "Successfully updated transaction!";
             $_SESSION['messageBg'] = "green";
         } catch(Exception $e) {

@@ -21,7 +21,7 @@ if (isset($_GET['search'])) {
     $searchType = $_GET['search-type'];
     if ($searchType == 'name') {
         //searchtype is name
-        $sql = "SELECT m.mem_id, ld.loan_detail_id, a.profile, lr.request_id, CONCAT(m.fname, ' ', m.lname) AS name, m.sex, TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) AS age, ld.loan_amount, ld.month_duration, ld.interest_rate, ld.is_paid
+        $sql = "SELECT m.mem_id, m.is_temp_mem, ld.loan_detail_id, a.profile, lr.request_id, CONCAT(m.fname, ' ', m.lname) AS name, m.sex, TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) AS age, ld.loan_amount, ld.month_duration, ld.interest_rate, ld.is_paid
                 FROM members m 
                 INNER JOIN loan_requests lr
                 ON lr.mem_id = m.mem_id
@@ -32,7 +32,7 @@ if (isset($_GET['search'])) {
                 WHERE lr.request_status = 'Approved' AND lr.is_claim = 1 AND ld.is_paid = 0 AND CONCAT(m.fname, ' ', m.lname) LIKE '%$searchValue%'";
     } else {
         //searchtype is mem_id
-        $sql = "SELECT m.mem_id, ld.loan_detail_id, a.profile, lr.request_id, CONCAT(m.fname, ' ', m.lname) AS name, m.sex, TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) AS age, ld.loan_amount, ld.month_duration, ld.interest_rate, ld.is_paid
+        $sql = "SELECT m.mem_id, m.is_temp_mem, ld.loan_detail_id, a.profile, lr.request_id, CONCAT(m.fname, ' ', m.lname) AS name, m.sex, TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) AS age, ld.loan_amount, ld.month_duration, ld.interest_rate, ld.is_paid
                 FROM members m 
                 INNER JOIN loan_requests lr
                 ON lr.mem_id = m.mem_id
@@ -51,7 +51,7 @@ if (isset($_GET['search'])) {
 } 
 
 //Default SQL Command
-$sql = "SELECT m.mem_id, ld.loan_detail_id, a.profile, lr.request_id, CONCAT(m.fname, ' ' , m.lname) AS name, m.sex, TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) AS age, ld.loan_amount, ld.month_duration, ld.interest_rate, ld.is_paid
+$sql = "SELECT m.mem_id, m.is_temp_mem, ld.loan_detail_id, a.profile, lr.request_id, CONCAT(m.fname, ' ' , m.lname) AS name, m.sex, TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) AS age, ld.loan_amount, ld.month_duration, ld.interest_rate, ld.is_paid
         FROM members m 
         INNER JOIN loan_requests lr
         ON lr.mem_id = m.mem_id
@@ -106,6 +106,7 @@ $isThereMember = false;
                                 <th>Profile</th>
                                 <th>Member ID</th>
                                 <th>Name</th>
+                                <th>Member Type</th>
                                 <th>Sex</th>
                                 <th>Age</th> 
                                 <th>Loan Detail ID</th>
@@ -133,6 +134,12 @@ $isThereMember = false;
                                             }
                                         }
 
+                                        if ($row['is_temp_mem'] == 0 || $row['is_temp_mem'] == false) { 
+                                            $member_type = 'Member';
+                                         } else {
+                                            $member_type = 'Temporary';
+                                         } 
+
                                         echo "<tr>";
                                         if (empty($row["profile"])) {
                                             echo "<td class='profile-img'><img src='./img/default-profile.png' alt='img'></td>";
@@ -142,6 +149,7 @@ $isThereMember = false;
                                         }
                                         echo "<td>$memId</td>";
                                         echo "<td>" . $row['name']. "</td>";
+                                        echo "<td class='text-center'>" . $member_type . "</td>";
                                         echo "<td>" . $row["sex"] . "</td>";
                                         echo "<td>" . $row['age']. "</td>";
                                         echo "<td>" . $row['loan_detail_id']. "</td>";
@@ -190,7 +198,7 @@ $isThereMember = false;
                         <div class="right">
                             <p class="name data"><?php echo $memInfo['name']?></p>
                             <div class="other-info">
-                                <p class="data">ID: <span class="value"><?php echo $memInfo['mem_id']?></p>
+                                <p class="data" >ID: <span class="value"><?php echo $memInfo['mem_id']?></p>
                                 <p>|</p>
                                 <p class="data">Age: <span class="value"><?php echo $memInfo['age']?></p>
                                 <p>|</p>
@@ -205,7 +213,7 @@ $isThereMember = false;
                 </div>
                 <div class="member-body">
                     <hr>
-                    <div class="info">
+                    <div class="info <?php echo (($memInfo['is_temp_mem'] == '1') ? 'hidden' : '')?>">
                         <p class="label">Total Savings: </p>
                         <p class="data">
                             <span class="detail">₱<?php echo ((isset($memInfo['mem_id'])) ? getTotalDeposits($conn, $memInfo['mem_id']) : 0 ); ?></span>
@@ -215,13 +223,16 @@ $isThereMember = false;
                         <p class="label">Loan Balance: </p>
                         <p class="data">
                         <span class="detail">₱<?php echo ((isset($memInfo['mem_id'])) ? getTotalLoanBalance($conn, $memInfo['mem_id']) . " <span class='c-gray small-text'>(+ ₱" . getTotalInterests($conn, $memInfo['mem_id']) . ' Interests)</span>' : 0);?></span>
-                        </p>
+                    </p>
                     </div>
-                    <div class="info">
+                    <div class="info <?php echo (($memInfo['is_temp_mem'] == '1') ? 'hidden' : '')?>">
                         <p class="label">Interest Share: </p>
                         <p class="data">
                             <span class="detail">₱<?php echo number_format(getMemberInterestsShare($conn), 2); ?></span>
                         </p>
+                    </div>
+                    <div class="info mt-3 <?php echo (($memInfo['is_temp_mem'] == '0') ? 'hidden' : '')?>">
+                        <p class="label c-red">Temporary Member for Purpose of Requesting Loan</p>
                     </div>
                 </div>
                 <div class="member-footer">
@@ -255,7 +266,7 @@ $isThereMember = false;
 
 
 <?php
-    $paidLoanQuery = "SELECT m.mem_id, ld.loan_detail_id, a.profile, lr.request_id, CONCAT(m.fname, ' ', m.lname) AS name, m.sex, TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) AS age, ld.loan_amount, ((ld.interest_rate/100) * ld.loan_amount) AS interest, ld.month_duration, ld.is_paid
+    $paidLoanQuery = "SELECT m.mem_id, m.is_temp_mem, ld.loan_detail_id, a.profile, lr.request_id, CONCAT(m.fname, ' ', m.lname) AS name, m.sex, TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) AS age, ld.loan_amount, ((ld.interest_rate/100) * ld.loan_amount) AS interest, ld.month_duration, ld.is_paid
     FROM members m 
     INNER JOIN loan_requests lr
     ON lr.mem_id = m.mem_id
@@ -279,6 +290,7 @@ $isThereMember = false;
                     <th>Profile</th>
                     <th>Member ID</th>
                     <th>Name</th>
+                    <th>Member Type</th>
                     <th>Sex</th>
                     <th>Age</th> 
                     <th>Loan Detail ID</th>
@@ -298,6 +310,12 @@ $isThereMember = false;
                                 $payment_status = "Paid";
                             }
 
+                            if ($row['is_temp_mem'] == 0 || $row['is_temp_mem'] == false) { 
+                                $member_type = 'Member';
+                            } else {
+                                $member_type = 'Temporary';
+                            } 
+
                             echo "<tr>";
                             if (empty($row["profile"])) {
                                 echo "<td class='profile-img'><img src='./img/default-profile.png' alt='img'></td>";
@@ -307,6 +325,7 @@ $isThereMember = false;
                             }
                             echo "<td>" . $row['mem_id'] . "</td>";
                             echo "<td>" . $row['name']. "</td>";
+                            echo "<td class='text-center'>" . $member_type. "</td>";
                             echo "<td>" . $row["sex"] . "</td>";
                             echo "<td>" . $row['age']. "</td>";
                             echo "<td>" . $row['loan_detail_id']. "</td>";

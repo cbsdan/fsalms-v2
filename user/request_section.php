@@ -76,6 +76,7 @@ $memId = $result['mem_id'];
             <th>Status</th>
             <th>Claim</th>
             <th>Payment</th>
+            <th>Cancel</th>
             </tr>
         </thead>
     <tbody>
@@ -128,6 +129,13 @@ $memId = $result['mem_id'];
             echo '<td class="c-' . ($row['request_status'] == 'Approved' ? 'green' : 'red') . ' text-center">' . $row['request_status'] . '</td>';
             echo "<td class='text-center'>$claim_status</td>";   
             echo "<td class='text-center $payment_status_class'>". $payment_status . "</td>";         
+            echo "<td class='text-center'>
+                    <p class='" . ($row['request_status'] != 'Pending' ? '' : 'hidden') . "'>N/A</p>
+                    <form action='./database/cancel-loan-request.php' method='POST' class='" . ($row['request_status'] == 'Pending' ? '' : 'hidden') . "'>
+                        <input type='hidden' name='loan_detail_id' value='". $row['loan_detail_id'] . "'>
+                        <button class='bg-red' type='submit' name='submit' value='submit'>Cancel</button>
+                    </form>
+                  </td>";   
             echo '</tr>';
         }
     } else {

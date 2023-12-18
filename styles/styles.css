@@ -200,6 +200,10 @@ main.default {
     align-items: center;
     justify-content: center;
 }
+.profile-container img, .profile img {
+    background-color: var(--input-box-background);
+
+}
 .info-container .details{
     display: flex;
     flex-wrap: wrap;
@@ -240,6 +244,7 @@ main.default {
     flex: 1 0 calc(50% - 1rem);
     display: flex;
     align-items: center;
+    justify-content: start;
 }
 .section .edit-container form .info, .section .password-container form .info {
     display: flex;
@@ -282,5 +287,9 @@ table td .imageContainer img{
     }
     .user.section {
         padding-top: 0 !important;
+    }
+    form .info {
+        flex-direction: column !important;
+        align-items: start !important;
     }
 }

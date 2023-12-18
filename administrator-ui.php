@@ -78,7 +78,7 @@
     document.addEventListener("DOMContentLoaded", ()=>{
         setTimeout(() => {
             messageEl.classList.add('hidden');
-        }, 5000);
+        }, 10000);
     })
 
     //close logo

@@ -10,6 +10,12 @@
             include($database_path_index);
         }
 
+        if ($_POST['type'] == 'Temporary') {
+            $is_temp_mem = 1;
+        }  else {
+            $is_temp_mem = 0;
+        }
+
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
         $sex = $_POST['sex'];
@@ -39,9 +45,9 @@
         }
 
         try {
-            $sql = "INSERT INTO members (fname, lname, sex, birthdate, address, contact, date_added) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO members (fname, lname, is_temp_mem, sex, birthdate, address, contact, date_added) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param('sssssss', $fname, $lname, $sex, $birthdate, $address, $contact, $date_added);
+            $stmt->bind_param('ssisssss', $fname, $lname, $is_temp_mem, $sex, $birthdate, $address, $contact, $date_added);
             $stmt->execute();
             
             $mem_id = $stmt->insert_id;
@@ -56,9 +62,13 @@
             $result = query($sql);
             $membership_fee = $result['membership_fee'];
 
-            $sql = "INSERT INTO deposit (deposited, mem_id) VALUES ($membership_fee, $mem_id)";
-            query($sql);
+            if ($is_temp_mem == 0) {
+                $sql = "INSERT INTO deposit (deposited, mem_id) VALUES ($membership_fee, $mem_id)";
+                query($sql);
+            }
             
+            updateMemberStatus($conn);
+
             $_SESSION['message'] = "Successfully added a new member";
             $_SESSION['messageBg'] = "green";
             $_SESSION['section'] = './administrator/administrator-add.php';

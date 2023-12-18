@@ -42,7 +42,7 @@ function commandScalar($sql) {
 function countMembers($conn) {
 
     try {
-        $query = "SELECT COUNT(*) as total_members FROM members";
+        $query = "SELECT COUNT(*) as total_members FROM members WHERE is_temp_mem = 0";
         $result = $conn->query($query);
 
         if ($result && $result->num_rows > 0) {
@@ -58,7 +58,7 @@ function countMembers($conn) {
 }
 
 //Get male count
-$queryMaleCount = "SELECT COUNT(mem_id) AS male_count FROM members WHERE sex = 'Male'";
+$queryMaleCount = "SELECT COUNT(mem_id) AS male_count FROM members WHERE sex = 'Male' AND is_temp_mem = 0";
 $resultMaleCount = $conn->query($queryMaleCount);
 
 if ($resultMaleCount && $resultMaleCount->num_rows > 0) {
@@ -70,7 +70,7 @@ if ($resultMaleCount && $resultMaleCount->num_rows > 0) {
 }
 
 // Get female count
-$queryFemaleCount = "SELECT COUNT(mem_id) AS female_count FROM members WHERE sex = 'Female'";
+$queryFemaleCount = "SELECT COUNT(mem_id) AS female_count FROM members WHERE sex = 'Female' AND is_temp_mem = 0";
 $resultFemaleCount = $conn->query($queryFemaleCount);
 
 if ($resultFemaleCount && $resultFemaleCount->num_rows > 0) {
@@ -333,7 +333,7 @@ function getTotalSavings($conn) {
 <!-- USER-> info_section -->
 <?php
 function getTotalDeposits($conn, $mem_id) {
-    $sql = "SELECT SUM(deposited) AS total_deposit FROM deposit WHERE mem_id = ?";
+    $sql = "SELECT COALESCE(SUM(deposited), 0) AS total_deposit FROM deposit WHERE mem_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $mem_id); // Assuming mem_id is a string, change "s" to "i" if it's an integer
     $stmt->execute();
@@ -346,6 +346,7 @@ function getTotalDeposits($conn, $mem_id) {
     // Return the total deposit
     return $totalDeposit;
 }
+
 ?>
 
 <?php
@@ -354,7 +355,7 @@ function getTotalWeeks($conn) {
     $start_date = getStartDate($conn);
     $end_date = getEndDate($conn);
 
-    return abs(floor((new DateTime($start_date))->diff(new DateTime($end_date))->days / 7));
+    return abs(floor((new DateTime($start_date))->diff(new DateTime($end_date))->days / 7)) + 1;
 
 }
 
@@ -414,6 +415,10 @@ function getWeekNumber($conn) {
 
         // Calculate the number of weeks
         $week_number = ceil($difference / $seconds_in_a_week);
+
+        if ($week_number >= getTotalWeeks($conn)) {
+            return getTotalWeeks($conn);
+        }
 
         return ($week_number > 0) ? $week_number : 0;
     } else {
@@ -645,6 +650,22 @@ function getLoanInterestRate ($conn, $transacId) {
 
     $interestRate = $result->fetch_assoc();
     return $interestRate['interest_rate'];
+}
+
+function updateMemberStatus ($conn) {
+    $totalRegularSavings = getMemberSavings($conn) + getMembershipFee($conn);
+
+    $sql = "UPDATE members m
+            LEFT JOIN deposit s ON s.mem_id = m.mem_id
+            SET status = CASE
+                         WHEN COALESCE((SELECT SUM(COALESCE(deposited, 0)) FROM deposit WHERE mem_id = m.mem_id), 0) >= ? THEN 'Regular'
+                         ELSE 'Irregular'
+                         END";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('d', $totalRegularSavings); // Assuming $totalRegularSavings is a double/float
+    $stmt->execute();
+
 }
 ?>
 

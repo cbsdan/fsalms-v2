@@ -13,6 +13,13 @@
 <div class="add-member p-1rem">
     <form action="./database/add-member.php" method="POST" enctype="multipart/form-data">
         <div class="info">
+            <label for="radio-sex">Type: <span class="required">*</span></label>
+            <div class="sex-radio-container">
+                <label for="radio-full-time" class="sex-label"><input id="radio-full-time" type="radio" name="type" value="Full Time" checked required> Member</label>
+                <label for="radio-temporary" class="sex-label"><input id="radio-temporary" type="radio" name="type" value="Temporary" required> Temporary</label>
+            </div>
+        </div>
+        <div class="info">
             <label for="input-fname">Name: <span class="required">*</span></label>
             <div class="input-name-container">
                 <input type="text" id="input-fname" name="fname" placeholder="First" required>

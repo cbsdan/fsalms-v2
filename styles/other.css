@@ -218,7 +218,10 @@ form .info .sex-radio-container {
     align-items: center;
     justify-content: start;
     gap: 0.2rem;
-    max-width: 200px;
+    max-width: 270px;
+}
+.sex-label input {
+    flex: 0 0 4rem!important;
 }
 .m-start-auto {
     display: block;

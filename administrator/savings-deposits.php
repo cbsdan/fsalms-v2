@@ -19,37 +19,55 @@ if (file_exists($database_path)) {
 if (isset($_GET['search'])) {
     $searchValue = $_GET['search-value'];
     $searchType = $_GET['search-type'];
+    
+    $member_status = $_GET['member_status'];
+
     if ($searchType == 'name') {
         //searchtype is name
-        $sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
+        $sql = "SELECT *, members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
                 FROM members
-                LEFT JOIN accounts ON members.mem_id = accounts.mem_id WHERE CONCAT(members.fname, ' ', members.lname) LIKE '%$searchValue%'";
+                LEFT JOIN accounts ON members.mem_id = accounts.mem_id 
+                WHERE CONCAT(members.fname, ' ', members.lname) 
+                LIKE '%$searchValue%' 
+                AND members.is_temp_mem = 0
+                AND ('$member_status' = 'all' OR members.status = '". ucfirst($member_status) ."')";
+
     } else {
         //searchtype is mem_id
-        $sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
+        $sql = "SELECT *, members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
                 FROM members
-                LEFT JOIN accounts ON members.mem_id = accounts.mem_id WHERE members.$searchType LIKE '%$searchValue%'";
+                LEFT JOIN accounts ON members.mem_id = accounts.mem_id 
+                WHERE members.$searchType LIKE '%$searchValue%' 
+                AND members.is_temp_mem = 0
+                AND ('$member_status' = 'all' OR members.status = '". ucfirst($member_status) . "')";
     }
     $_SESSION['section'] = './administrator/savings-deposits.php';
     $_SESSION['activeNavId'] = 's-deposits';
     $_SESSION['sql_command'] = $sql;
     $_SESSION['selectedSearchType'] = $searchType;
+    $_SESSION['searchValue'] = $searchValue;
+    $_SESSION['member_status'] = $member_status;
+
     header('Location: ../administrator-ui.php');
     exit();
 } 
 
 //Default SQL Command
-$sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
+$sql = "SELECT *, members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
         FROM members
-        LEFT JOIN accounts ON members.mem_id = accounts.mem_id";
-$searchType = 'name';
+        LEFT JOIN accounts ON members.mem_id = accounts.mem_id
+        WHERE members.is_temp_mem = 0";
 
 //Search SQL Command
 if (isset($_SESSION['sql_command']) && $_SESSION['selectedSearchType']) {
     $sql = $_SESSION['sql_command'];
     $searchType = $_SESSION['selectedSearchType'];
+    $searchValue = $_SESSION['searchValue'];
+    $member_status = $_SESSION['member_status'];
     $_SESSION['sql_command'] = null;
     $_SESSION['selectedSearchType'] = null;
+    $_SESSION['searchValue'] = null;
+    $_SESSION['member_status'] = null;
 }
 if (isset($_SESSION['mem_info'])) {
     $memInfo = $_SESSION['mem_info'];
@@ -57,6 +75,7 @@ if (isset($_SESSION['mem_info'])) {
 }
 
 //use to identify later if there is atleast a member fetch from database 
+
 $isThereMember = false;
 ?>
 <h1>Savings Deposit</h1>
@@ -68,17 +87,17 @@ $isThereMember = false;
             <div class="left left-section">
                 <form action="./administrator/savings-deposits.php" method="GET">
                     <div class="search-section">
-                        <input class="search-input" type="text" class="search-input" placeholder="Search here" name="search-value">
+                        <input class="search-input" type="text" class="search-input" placeholder="Search here" name="search-value" value="<?php if (isset($searchValue)) { echo $searchValue;}?>">
                         <select class="options select-input" name="search-type">
-                            <option value="mem_id" class="option" <?php if ($searchType == 'mem_id') ?>>ID</option>
-                            <option value="name" class="option" <?php if ($searchType == 'name') echo "selected"?>>Name</option>
+                            <option value="mem_id" class="option" <?php if (isset($searchType) && $searchType == 'mem_id') echo "selected"?>>ID</option>
+                            <option value="name" class="option" <?php if (!isset($searchType) || $searchType == 'name') echo "selected"?>>Name</option>
                         </select> 
-                        <select class="options select-input" name="member-status">
-                            <option value="all" class="option" <?php if ($searchType == 'mem_id') echo "selected"?>>All</option>
-                            <option value="regular" class="option" <?php if ($searchType == 'name') ?>>Regular</option>
-                            <option value="non-regular" class="option" <?php if ($searchType == 'name') ?>>Non-Regular</option>
+                        <select id='members-status-select' class="options select-input" name="member_status">
+                            <option value="all" class="option" <?php if (!isset($member_status) || $member_status == 'all' ) echo "selected"?>>All</option>
+                            <option value="regular" class="option" <?php if (isset($member_status) && $member_status == 'regular') echo "selected"?>>Regular</option>
+                            <option value="irregular" class="option" <?php if (isset($member_status) && $member_status == 'irregular') echo "selected"?>>Irregular</option>
                         </select> 
-                        <input type="submit" class="hidden" name="search" value="search">
+                        <button type="submit" class="" id='search-btn' name="search" value="search"><img src='./img/search.png'></button>
                     </div>
                 </form>
                 <p class='mb-3'><span>Total Weekly Savings: ₱ </span><span class="value c-green"><?php echo number_format(getMemberSavings($conn) + getMembershipFee($conn), 2);?></span><span class='gray-text'> (+ ₱ <?php echo getMembershipFee($conn)?> Membership Fee)</span></p>
@@ -92,6 +111,7 @@ $isThereMember = false;
                                 <th>Sex</th>
                                 <th>Age</th> 
                                 <th>Total Savings</th>
+                                <th>Status</th>
                                 <th>Select</th>
                             </tr>
                         </thead>
@@ -123,6 +143,7 @@ $isThereMember = false;
                                         echo "<td>" . $row["sex"] . "</td>";
                                         echo "<td>" . $row['age']. "</td>";
                                         echo "<td class=". (((getMemberSavings($conn) + getMembershipFee($conn)) <= getTotalDeposits($conn, $memId)) ? 'c-green' : 'c-red') .">₱" . getTotalDeposits($conn, $memId) . "</td>";
+                                        echo "<td class='text-center'>" . $row['status'] . "</td>";
                                         echo "<td>
                                                 <form action='database/fetch_member_info.php' method='POST'>
                                                     <input type='hidden' name='mem_id' value='$memId'>

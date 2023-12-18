@@ -22,12 +22,12 @@ if (isset($_GET['search'])) {
     $searchType = $_GET['search-type'];
     if ($searchType == 'name') {
         //searchtype is name
-        $sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.fname, members.lname, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, members.birthdate, accounts.profile 
+        $sql = "SELECT members.mem_id, members.is_temp_mem, CONCAT(members.fname, ' ', members.lname) AS name, members.fname, members.lname, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, members.birthdate, accounts.profile 
                 FROM members
                 LEFT JOIN accounts ON members.mem_id = accounts.mem_id WHERE CONCAT(members.fname, ' ', members.lname) LIKE '%$searchValue%'";
     } else {
         //searchtype is mem_id
-        $sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.fname, members.lname, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, members.birthdate,  accounts.profile 
+        $sql = "SELECT members.mem_id, members.is_temp_mem, CONCAT(members.fname, ' ', members.lname) AS name, members.fname, members.lname, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, members.birthdate,  accounts.profile 
                 FROM members
                 LEFT JOIN accounts ON members.mem_id = accounts.mem_id WHERE members.$searchType LIKE '%$searchValue%'";
     }
@@ -40,7 +40,7 @@ if (isset($_GET['search'])) {
 } 
 
 //Default SQL Command
-$sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
+$sql = "SELECT members.mem_id, members.is_temp_mem, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
         FROM members
         LEFT JOIN accounts ON members.mem_id = accounts.mem_id";
 $searchType = 'name';   
@@ -81,6 +81,7 @@ $isThereMember = false;
                     <th>Profile</th>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Member Type</th>
                     <th>Sex</th>
                     <th>Age</th> 
                     <th>Edit</th> 
@@ -101,8 +102,15 @@ $isThereMember = false;
                                 $imgSrc = getImageSrc($row['profile']);
                                 echo "<td class='profile-img'><img src='$imgSrc' alt='img'></td>";
                             }
+
+                            if ($row["is_temp_mem"] == 0 || $row["is_temp_mem"] == false ) {
+                                $member_type = 'Member';
+                            } else {
+                                $member_type = 'Temporary';
+                            }
                             echo "<td>$memId</td>";
                             echo "<td>" . $row['name']. "</td>";
+                            echo "<td class='text-center'>" . $member_type . "</td>";
                             echo "<td>" . $row["sex"] . "</td>";
                             echo "<td>" . $row['age']. "</td>";
                             echo "<td class='text-center'>
@@ -148,6 +156,13 @@ $isThereMember = false;
         <input type="hidden" name="mem_id" value="<?php if (isset($memInfo['mem_id'])) { echo $memInfo['mem_id'] ;}?>">
         <input type="hidden" name="old_username" value="<?php echo $memInfo['username'];?>">
         <div class="info">
+            <label>Member Type: <span class="required">*</span></label>
+            <div class="sex-radio-container">
+                <label for="radio-member" class="sex-label"><input id="radio-member" type="radio" name="member_type" value="Member" required <?php if($memInfo['is_temp_mem'] == 0) {echo "checked";}?>> Member</label>
+                <label for="radio-temporary" class="sex-label"><input id="radio-temporary" type="radio" name="member_type" value="Temporary" required <?php if($memInfo['is_temp_mem'] == 1) {echo "checked";}?>> Temporary</label>
+            </div>
+        </div>
+        <div class="info">
             <label for="input-fname">Name: <span class="required">*</span></label>
             <div class="input-name-container">
                 <input type="text" id="input-fname" name="fname" placeholder="First" value="<?php echo $memInfo['fname']?>" required>
@@ -155,7 +170,7 @@ $isThereMember = false;
             </div>
         </div>
         <div class="info">
-            <label for="radio-sex">Sex: <span class="required">*</span></label>
+            <label>Sex: <span class="required">*</span></label>
             <div class="sex-radio-container">
                 <label for="radio-male" class="sex-label"><input id="radio-male" type="radio" name="sex" value="Male" required <?php if($memInfo['sex'] == 'Male') {echo "checked";}?>> Male</label>
                 <label for="radio-female" class="sex-label"><input id="radio-female" type="radio" name="sex" value="Female" required <?php if($memInfo['sex'] == 'Female') {echo "checked";}?>> Female</label>
@@ -179,7 +194,10 @@ $isThereMember = false;
         </div>
         <div class="info">
             <label for="input-password">Password: <span class="required">*</span></label>
-            <input type="password" id="input-password" name="password" placeholder="Enter password" value="<?php echo $memInfo['password']?>" required>
+            <div class='password-container'>
+                <input type="password" id="input-password" name="password" placeholder="Enter password" value="<?php echo $memInfo['password']?>" required>
+                <div class='show-pw show'><img src="./img/show.png" alt="show"></div>
+            </div>
         </div>
         <div class="info">
             <label for="upload-img">Profile:</label>
@@ -203,6 +221,7 @@ $isThereMember = false;
             }
         })
     })
+
 
 
 </script>

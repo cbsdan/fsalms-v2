@@ -17,6 +17,8 @@
             $sql = "INSERT INTO deposit(deposited, mem_id) VALUES($deposit, $mem_id)";
             query($sql);
 
+            updateMemberStatus($conn);
+
             $_SESSION['message'] = "Successfully deposit savings!";
             $_SESSION['messageBg'] = 'green';
 
@@ -25,8 +27,8 @@
             $_SESSION['searchType'] = null;
             $_SESSION['activity'] = null;
 
-            $_SESSION['section'] = './administrator/member-transactions.php';
-            $_SESSION['activeNavId'] = 'm-transactions';
+            $_SESSION['section'] = './administrator/savings-deposits.php';
+            $_SESSION['activeNavId'] = 's-deposits';
 
         } catch (Exception $e) {
             $_SESSION['message'] = "Failed to deposit savings. Error : $e";

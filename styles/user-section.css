@@ -111,7 +111,7 @@ main .section.user h1 {
     align-items: center;
     justify-content: start;
     gap: 1rem;
-    max-width: 200px;
+    max-width: 270px;
 }
 #edit-btn, #pw-change-btn {
     margin-top: 1rem;
@@ -121,8 +121,27 @@ main .section.user h1 {
     margin-top: 3rem;
 }
 
+#temporary-label {
+    margin-left: 1rem;
+    border-radius: 0.3rem;
+    padding: 0.3rem;
+    font-size: 1.3rem;
+}
+main.user #user-name {
+    display: flex;
+    align-items: center;
+}
+main.user #user-name .label {
+    flex-shrink: 0;
+}
 @media only screen and (max-width: 840px) {
     .user-info .content .details .info span.value {
         flex: 2;
     }
   }
+
+@media only screen and (max-width: 600px) {
+    main.user #user-name {
+        flex-wrap: wrap;
+    }
+}

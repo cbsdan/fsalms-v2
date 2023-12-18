@@ -69,6 +69,24 @@ window.addEventListener("scroll", () => {
   }
 });
 
+const showPw = document.querySelector('.password-container .show-pw');
+showPw.addEventListener('click', ()=>{
+    const showPwImg = showPw.querySelector('img');
+    const inputPw = document.querySelector('#input-password');
+
+    if (showPw.classList.contains('show')) {
+        showPwImg.src = './img/hide.png';
+        showPw.classList.remove('show')
+        inputPw.type = 'text';
+        
+    } else {
+        showPwImg.src = './img/show.png';
+        showPw.classList.add('show')
+        inputPw.type = 'password';
+    }
+   
+})
+
 //toggling the full screen or exit full screen button
 let isFullScreen = false;
 let screenToggle = document.querySelector('.screen-toggle');

@@ -56,6 +56,7 @@ $records = $conn->query($records_sql);
             <tr>
                 <th>Request ID</th>
                 <th>Name</th>
+                <th>Member Type</th>
                 <th>Amount</th>
                 <th>Duration</th>
                 <th>Interest Rate</th>
@@ -70,10 +71,16 @@ $records = $conn->query($records_sql);
             <?php
                 if ($loan_requests->num_rows > 0) {
                     while ($loan_request = $loan_requests->fetch_assoc()) {
+                        if ($loan_request['is_temp_mem'] == 0 || $loan_request['is_temp_mem'] == false) { 
+                            $member_status = 'Member';
+                         } else {
+                            $member_status = 'Temporary';
+                         } 
 
                         echo " <tr>
                                 <td>" . $loan_request ['request_id'] . "</td>
                                 <td>" . $loan_request ['name'] . "</td>
+                                <td class='text-center'>" . $member_status . "</td>
                                 <td>₱" . $loan_request ['loan_amount'] . "</td>
                                 <td class='text-center'>" . $loan_request ['month_duration'] . "</td>
                                 <td class='text-center'>" . $loan_request ['interest_rate'] . "%</td>
@@ -120,6 +127,7 @@ $records = $conn->query($records_sql);
             <tr>
                 <th>Request ID</th>
                 <th>Name</th>
+                <th>Member Type</th>
                 <th>Amount</th>
                 <th>Duration</th>
                 <th>Interest Rate</th>
@@ -152,9 +160,15 @@ $records = $conn->query($records_sql);
                             $statusClass = 'c-red';
                         }
 
+                        if ($record['is_temp_mem'] == 0 || $record['is_temp_mem'] == false) { 
+                            $member_status = 'Member';
+                         } else {
+                            $member_status = 'Temporary';
+                         } 
                         echo "<tr>
                               <td>" .$record['request_id'] . "</td>
                               <td>" .$record['name'] . "</td>
+                              <td class='text-center'>" . $member_status . "</td>
                               <td>₱" .$record['loan_amount'] . "</td>
                               <td class='text-center'>" .$record['month_duration'] . "</td>
                               <td class='text-center'>" .$record['interest_rate'] . "%</td>

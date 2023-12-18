@@ -41,7 +41,7 @@ if (isset($memInfo['profile']) && $memInfo['profile'] != '') {
         </div>
         <div class="info-container">
             <div>
-                <h3 id="user-name"><?php echo $memInfo['name']; ?></h3>
+                <h3 id="user-name"><span class='label'><?php echo $memInfo['name']; ?></span><span id='temporary-label' class="bg-red <?php echo (($memInfo['is_temp_mem'] == 0) ? 'hidden': '');?>">Temporary</span></h3>
             </div>
             <div class="details">
                 <p><span class="semibold-text">ID: </span><span><?php echo $memId?></span></p>

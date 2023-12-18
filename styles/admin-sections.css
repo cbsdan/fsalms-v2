@@ -352,6 +352,54 @@ table td.profile-img {
 .reset-container .description {
     font-style: italic;
 }
+.add-member .info, .edit-member .info {
+    height: 4rem;
+}
+
+/* Search Button */
+#search-btn {
+    background-color: var(--input-box-background) !important;
+    padding: 0.5rem !important;
+    margin-top: 0 !important;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0 !important;
+    overflow: hidden;
+}
+#search-btn img {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    object-fit: cover !important;
+    display: block;
+    margin: auto;
+}
+main.admin .info .password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 280px;
+    width: 100%;
+}
+
+.info .password-container input {
+    width: 100%;
+    color: var(--main-color);
+}
+
+.info .password-container .show-pw {
+    position: absolute;
+    right: 1.5rem;
+    opacity: 0.6;
+}
+
+.info .password-container .show-pw img {
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+}
+
 @media screen and (min-width: 1200px){
     .overview-card {
         background-color: rgb(var(--light-main-color-rgb), 0.8);

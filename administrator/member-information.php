@@ -21,44 +21,54 @@ if (file_exists($database_path)) {
 if (isset($_GET['search'])) {
     $searchValue = $_GET['search-value'];
     $searchType = $_GET['search-type'];
+    
+    $member_type = $_GET['member_type'];
+
     if ($searchType == 'name') {
         //searchtype is name
-        $sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
-                FROM members
-                LEFT JOIN accounts ON members.mem_id = accounts.mem_id
-                WHERE CONCAT(members.fname, ' ', members.lname) LIKE '%$searchValue%'
-                GROUP BY name";
-    } else {
-        //searchtype is mem_id
-        $sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
+        $sql = "SELECT *, members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
                 FROM members
                 LEFT JOIN accounts ON members.mem_id = accounts.mem_id 
-                WHERE members.$searchType LIKE '%$searchValue%'
-                GROUP BY name";
+                WHERE CONCAT(members.fname, ' ', members.lname) 
+                LIKE '%$searchValue%' 
+                AND ('$member_type' = 'all' OR members.is_temp_mem = '$member_type')";
+
+    } else {
+        //searchtype is mem_id
+        $sql = "SELECT *, members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
+                FROM members
+                LEFT JOIN accounts ON members.mem_id = accounts.mem_id 
+                WHERE members.$searchType LIKE '%$searchValue%' 
+                AND ('$member_type' = 'all' OR members.is_temp_mem = '$member_type')";
     }
     $_SESSION['section'] = './administrator/member-information.php';
     $_SESSION['activeNavId'] = 'm-information';
     $_SESSION['sql_command'] = $sql;
     $_SESSION['selectedSearchType'] = $searchType;
+    $_SESSION['searchValue'] = $searchValue;
+    $_SESSION['member_type'] = $member_type;
+
     header('Location: ../administrator-ui.php');
     exit();
 } 
 
 //Default SQL Command
-$sql = "SELECT members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
+$sql = "SELECT *, members.mem_id, CONCAT(members.fname, ' ', members.lname) AS name, members.sex, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age, accounts.profile 
         FROM members
         LEFT JOIN accounts ON members.mem_id = accounts.mem_id
-        GROUP BY name";
-$searchType = 'name';
+        WHERE members.is_temp_mem = 0";
 
 //Search SQL Command
 if (isset($_SESSION['sql_command']) && $_SESSION['selectedSearchType']) {
     $sql = $_SESSION['sql_command'];
     $searchType = $_SESSION['selectedSearchType'];
+    $searchValue = $_SESSION['searchValue'];
+    $member_type = $_SESSION['member_type'];
     $_SESSION['sql_command'] = null;
     $_SESSION['selectedSearchType'] = null;
+    $_SESSION['searchValue'] = null;
+    $_SESSION['member_type'] = null;
 }
-
 if (isset($_SESSION['mem_info'])) {
     $memInfo = $_SESSION['mem_info'];
     $_SESSION['mem_info'] = null;
@@ -74,13 +84,18 @@ $isThereMember = false;
     <div class="left-section section">
         <form action="./administrator/member-information.php" method="GET">
             <div class="search-section">
-                <input class="search-input" type="text" class="search-input" placeholder="Search here" name="search-value">
-                <select class="options select-input" name="search-type">
-                    <option value="mem_id" class="option" <?php if ($searchType == 'mem_id') echo "selected"?>>ID</option>
-                    <option value="name" class="option" <?php if ($searchType == 'name') echo "selected"?>>Name</option>
-                </select> 
-                <input type="submit" class="hidden" name="search" value="search">
-            </div>
+                    <input class="search-input" type="text" class="search-input" placeholder="Search here" name="search-value" value="<?php if (isset($searchValue)) { echo $searchValue;}?>">
+                    <select class="options select-input" name="search-type">
+                        <option value="mem_id" class="option" <?php if (isset($searchType) && $searchType == 'mem_id') echo "selected"?>>ID</option>
+                        <option value="name" class="option" <?php if (!isset($searchType) || $searchType == 'name') echo "selected"?>>Name</option>
+                    </select> 
+                    <select id='members-status-select' class="options select-input" name="member_type">
+                        <option value="all" class="option" <?php if (isset($member_type) && $member_type == 'all' ) echo "selected"?>>All</option>
+                        <option value="0" class="option" <?php if (!isset($member_type) || $member_type == '0') echo "selected"?>>Member</option>
+                        <option value="1" class="option" <?php if (isset($member_type) && $member_type == '1') echo "selected"?>>Temporary</option>
+                    </select> 
+                    <button type="submit" class="" id='search-btn' name="search" value="search"><img src='./img/search.png'></button>
+                </div>
         </form>
         <?php $members = $conn->query($sql); ?>
         <h4 class='mb-3'>Total: <span class="value"><?php echo $members->num_rows?></span></h4>
@@ -92,6 +107,7 @@ $isThereMember = false;
                         <th>Profile</th>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>Member Type</th>
                         <th>Sex</th>
                         <th>Age</th> 
                         <th>Select</th> 
@@ -120,8 +136,16 @@ $isThereMember = false;
                                 $imgSrc = getImageSrc($member['profile']);
                                 echo "<td class='profile-img'><img src='$imgSrc' alt='img'></td>";
                             }
+
+                            if ($member['is_temp_mem'] == 0) {
+                                $member_type = 'Member';
+                            } else {
+                                $member_type = 'Temporary';
+                            }
+
                             echo "<td>$memId</td>";
-                            echo "<td>" . $member['name']. "</td>";
+                            echo "<td>" . $member['name'] . "</td>";
+                            echo "<td>" . $member_type . "</td>";
                             echo "<td>" . $member["sex"] . "</td>";
                             echo "<td>" . $member['age']. "</td>";
                             echo "<td>
