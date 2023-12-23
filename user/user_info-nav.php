@@ -45,16 +45,16 @@ if (isset($memInfo['profile']) && $memInfo['profile'] != '') {
             </div>
             <div class="details">
                 <p><span class="semibold-text">ID: </span><span class='value'><?php echo $memId?></span></p>
-                <span class="semibold-text">|</span>
+                <span class="semibold-text line">|</span>
                 <p><span class="semibold-text">Age: </span><span class='value'><?php echo $memInfo['age']; ?></span></p>
-                <span class="semibold-text">|</span>
+                <span class="semibold-text line">|</span>
                 <p><span class="semibold-text">Sex: </span><span class='value'><?php echo $memInfo['sex']; ?></span></p>
             </div>
             <div class="details">
                 <p>
                     <span class="semibold-text">Address: </span><span class='value'><?php echo (empty($memInfo['address']) ? 'null' : $memInfo['address']);?></span>
                 </p>
-                <span class="semibold-text">|</span>
+                <span class="semibold-text line">|</span>
                 <p>
                     <span class="semibold-text">Created on: </span><span id="creation-date" class='value'><?php echo $memInfo['date_added']; ?></span>
                 </p>

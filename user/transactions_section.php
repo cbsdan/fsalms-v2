@@ -18,6 +18,12 @@ if (file_exists($database_path)) {
 
 $username = $_SESSION['valid'];
 
+if (isset($_SESSION['limit'])) {
+     $limit = $_SESSION['limit'];
+    $_SESSION['limit'] = null;
+} else {
+    $limit = 25;
+}
 //DEFAULT SQL COMMAND, IF ADMIN DOESN'T SEARCH AND FILTER ACTIVITY
 $sql = "SELECT * FROM (
             SELECT 'Deposits' as activity, a.username, d.deposit_id AS transaction_id, m.mem_id, CONCAT(m.fname, ' ', m.lname) AS name, d.deposited AS amount, d.deposit_timestamp AS date
@@ -42,8 +48,18 @@ $sql = "SELECT * FROM (
             WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
         ) AS combined_result
         WHERE username = '$username'
-        ORDER BY date DESC;";
+        ORDER BY date DESC
+        LIMIT $limit;";
 
+
+if (isset($_GET['select-count'])) {
+    $_SESSION['limit'] = $_GET['select-count'];
+
+    $_SESSION['section'] = './user/transactions_section.php';
+    $_SESSION['activeNavId'] = 'transaction-nav';
+    header('Location: ../user-ui.php');
+    exit();
+}
 //SQL COMMAND IF ADMIN FILTER ACTIVITY, ALL, DEPOSITS, LOAN OR LOAN PAYMENT
 if (isset($_SESSION['activity'])) {
     //if all is selected in filtering activity it will assigned null else it will assigned deposits, loan or loan payment
@@ -75,7 +91,8 @@ if (isset($_SESSION['activity'])) {
             WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
         ) AS combined_result
         WHERE activity = '$activity' AND username = '$username' 
-        ORDER BY date DESC;";
+        ORDER BY date DESC
+        LIMIT $limit;";
     }
 }
 
@@ -123,6 +140,18 @@ $transactions = $conn->query($sql);
                 </tbody>
             </table>
         </div>
+        <div class='load-more mt-3'>
+        <form id='form-limit-transactions' action='./user/transactions_section.php' method='GET'>
+            <label for='select-count'>Limit Transactions: </label>
+            <select id='select-count' name='select-count'>
+                <option value="25" <?php echo ($limit == '25' ? 'selected' : '')?>>25</option>
+                <option value="50" <?php echo ($limit == '50' ? 'selected' : '')?>>50</option>
+                <option value="100" <?php echo ($limit == '100' ? 'selected' : '')?>>100</option>
+                <option value="10000" <?php echo ($limit == '10000' ? 'selected' : '')?>>All</option>
+            </select>
+            <button type='submit' name='load-more' class='bg-green'>Apply</button>
+        </form>    
+    </div>
     </div>
 </div>
 

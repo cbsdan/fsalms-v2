@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="./styles/admin-sections.css">
     <link rel="stylesheet" href="./styles/other.css">
     <link rel="stylesheet" href="./styles/login.css">
+    <link rel="stylesheet" href="./styles/media-query.css">
     <link rel="stylesheet" href="./styles/variables.css">
     <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
 

@@ -1,0 +1,83 @@
+@media screen and (max-width: 600px) {
+
+    form .info { 
+        height: 7.5rem !important;
+    }
+
+    #user-profile {
+        width: 7rem;
+        height: 7rem;
+        border: 0.1rem solid var(--main-color);
+    }
+
+    main.user .background {
+        align-items: start !important;
+        justify-content: start !important;
+        gap: 1.6rem;
+    }
+
+    main.user .background .profile-container img{
+        margin-top: 0.9rem;
+    }
+    .user-info .info-container {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    .info-container .details {
+        flex-direction: row;
+        flex-wrap: wrap !important;
+    }
+    .info-container .details:nth-child(2) {
+        width: 220px !important;
+    }
+    .info-container .details:nth-child(2) p:nth-child(3) {
+        flex-grow: 0 !important;
+        flex-basis:50px !important;
+    }
+    .info-container .details:last-child {
+        flex-direction: column;
+
+    }
+    .info-container .details:last-child p {
+        max-width: 100% !important;
+    }
+    .info-container .details p {
+        flex: 1 !important;
+        max-width: calc(50% - 1.2rem) !important;
+        width: 100%;
+    }
+    .info-container .details .line {
+        display: none;
+    }
+
+    html {
+        font-size: 55%;
+    }
+
+    main.default .background {
+        padding: 2rem 1rem !important;
+    }
+    .sex-radio-container {
+        width: 100% !important;
+        max-width: 600px;
+        flex: 1 !important;
+    }
+    form .info .input-name-container {
+        height: 4rem !important;
+        max-width: 600px !important;
+        width: 100% !important;
+    }
+    form .info .input-name-container input{
+        max-width: calc(50% - 0.25rem) !important;
+
+    }
+    form .info label {
+        width: 100% !important;
+    }
+    form .info input {
+        width: 100% !important;
+        max-width: 600px !important;
+        height: 4rem;
+    }
+
+}

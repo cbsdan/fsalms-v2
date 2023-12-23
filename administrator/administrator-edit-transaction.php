@@ -16,22 +16,37 @@
         include_once($database_path_index);
     }
     
+    // if (isset($_GET['search'])) {
+    //     $searchValue = $_GET['search-value'];
+    //     $searchType = $_GET['search-type'];
+    // } 
+
     //FOR SEARCH 
-    if (isset($_GET['search'])) {
-        $searchValue = $_GET['search-value'];
-        $searchType = $_GET['search-type'];
-    } 
-    
-    if (isset($_GET['searchValue']) && isset($_GET['searchType'])) {
-        $searchValue = $_SESSION['searchValueTrans'] = $_GET['searchValue'];
-        $searchType = $_SESSION['searchTypeTrans'] = $_GET['searchType'];
+        
+    $limit = 25;
+
+    if (isset($_GET['searchValue']) || isset($_GET['searchType']) || isset($_GET['load-more'])) {
+        
+        if (isset($_GET['searchValue']) && isset($_GET['searchType'])) {
+            $searchValue = $_SESSION['searchValueTrans'] = $_GET['searchValue'];
+            $searchType = $_SESSION['searchTypeTrans'] = $_GET['searchType'];
+        
+        } else if (isset ($_GET['load-more'])) {
+            $limit = $_SESSION['limit'] = $_GET['select-count'];    
+            
+        }else if (isset($_GET['searchValue']) && isset($_GET['searchType']) && isset($_GET['load-more'])) { 
+            $searchValue = $_SESSION['searchValueTrans'] = $_GET['searchValue'];
+            $searchType = $_SESSION['searchTypeTrans'] = $_GET['searchType'];
+            $limit = $_SESSION['limit'] = $_GET['select-count'];    
+        }
     
         $_SESSION['section'] = './administrator/administrator-edit-transaction.php';
         $_SESSION['activeNavId'] = 'a-editTransaction';
         header('Location: ../administrator-ui.php');
         exit();
-    }
     
+    }
+
     //DEFAULT SQL COMMAND, IF ADMIN DOESN'T SEARCH AND FILTER ACTIVITY
     $sql = "SELECT * FROM (
                 SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, d.deposited AS amount, d.deposit_timestamp AS date
@@ -56,8 +71,40 @@
                 WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
             ) AS combined_result
     
-            ORDER BY date DESC;";
+            ORDER BY date DESC
+            LIMIT $limit";
     
+    if (isset($_SESSION['limit'])) {
+        $limit = $_SESSION['limit'];
+        $_SESSION['limit'] = null;
+        
+        $sql = "SELECT * FROM (
+            SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, d.deposited AS amount, d.deposit_timestamp AS date
+            FROM members m 
+            INNER JOIN accounts a ON a.mem_id = m.mem_id 
+            INNER JOIN deposit d ON d.mem_id = a.mem_id
+
+            UNION 
+
+            SELECT 'Loan Payment' as activity, lp.payment_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem,lp.payment_amount AS amount, lp.payment_timestamp AS date
+            FROM members m 
+            INNER JOIN accounts a ON a.mem_id = m.mem_id 
+            INNER JOIN loan_payment lp ON lp.mem_id = m.mem_id
+
+            UNION 
+
+            SELECT 'Loan' as activity, ld.loan_detail_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name,m.is_temp_mem, ld.loan_amount AS amount, lr.claimed_timestamp AS date
+            FROM members m 
+            INNER JOIN accounts a ON a.mem_id = m.mem_id 
+            INNER JOIN loan_requests lr ON lr.mem_id = m.mem_id
+            INNER JOIN loan_details ld ON ld.loan_detail_id = lr.loan_detail_id
+            WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
+        ) AS combined_result
+
+        ORDER BY date DESC;
+        LIMIT $limit";
+    }
+
     //SQL COMMAND IF ADMIN FILTER ACTIVITY, ALL, DEPOSITS, LOAN OR LOAN PAYMENT
     if (isset($_SESSION['activity'])) {
         //if all is selected in filtering activity it will assigned null else it will assigned deposits, loan or loan payment
@@ -89,7 +136,8 @@
                 WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
             ) AS combined_result
             WHERE activity = '$activity'
-            ORDER BY date DESC;";
+            ORDER BY date DESC
+            LIMIT $limit;";
         }
     }
     
@@ -98,6 +146,14 @@
         $searchValue = $_SESSION['searchValueTrans'];
         $searchType = $_SESSION['searchTypeTrans'];
     
+        $_SESSION['searchValueTrans'] = null;
+        $_SESSION['searchTypeTrans'] = null;
+
+        if (isset($_SESSION['limit'])) {
+            $limit = $_SESSION['limit'];
+            $_SESSION['limit'] = null;
+        }
+
         if ($searchValue != '') {
             //searchtype is name
             $sql = "SELECT * FROM (
@@ -123,7 +179,8 @@
                 WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
             ) AS combined_result
             WHERE $searchType LIKE '%$searchValue%'
-            ORDER BY date DESC;";
+            ORDER BY date DESC
+            LIMIT $limit;";
         }
     
     } 
@@ -133,6 +190,14 @@
         $searchType = $_SESSION['searchTypeTrans'];
         $searchValue = $_SESSION['searchValueTrans'];
     
+        $_SESSION['searchTypeTrans'] = null;
+        $_SESSION['searchValueTrans'] = null;
+
+        if (isset($_SESSION['limit'])) {
+            $limit = $_SESSION['limit'];
+            $_SESSION['limit'] = null;
+        }
+
         if ($searchValue != '' && $activity != null) {
             $sql = "SELECT * FROM (
                 SELECT 'Deposits' as activity, d.deposit_id AS transaction_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, d.deposited AS amount, d.deposit_timestamp AS date
@@ -157,12 +222,11 @@
                 WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
             ) AS combined_result
             WHERE activity = '$activity' AND $searchType LIKE '%$searchValue%'
-            ORDER BY date DESC;";
+            ORDER BY date DESC
+            LIMIT $limit;";
         }
     }
     
-    // echo $sql;
-    // exit();
     $transactions = $conn->query($sql);
 
     if (isset($_SESSION['transactionInfo'])) {
@@ -254,6 +318,18 @@
                 ?>
             </tbody>
         </table>
+    </div>
+    <div class='load-more mt-3'>
+        <form id='form-limit-transactions' action='./administrator/member-transactions.php' method='GET'>
+            <label for='select-count'>Limit Transactions: </label>
+            <select id='select-count' name='select-count'>
+                <option value="25" <?php echo ($limit == '25' ? 'selected' : '')?>>25</option>
+                <option value="50" <?php echo ($limit == '50' ? 'selected' : '')?>>50</option>
+                <option value="100" <?php echo ($limit == '100' ? 'selected' : '')?>>100</option>
+                <option value="10000" <?php echo ($limit == '10000' ? 'selected' : '')?>>All</option>
+            </select>
+            <button type='submit' name='load-more' class='bg-green'>Apply</button>
+        </form>    
     </div>
 </div>
 <div class="edit-transaction p-1rem <?php echo (isset($transactionInfo)) ? '' : 'hidden'?>">

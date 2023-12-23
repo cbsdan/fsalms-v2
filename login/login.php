@@ -74,6 +74,6 @@
     logStatus.classList.add('hidden');
     let bodyEl = document.querySelector('body');
     
-    bodyEl.style.backgroundImage = "url('./img/background-img.png')";
+    bodyEl.style.background= "rgba(100,149,237, 0.7)";
     bodyEl.style.backgroundSize = "contain";
 </script>

@@ -399,7 +399,21 @@ main.admin .info .password-container {
     display: block;
     margin: auto;
 }
-
+#form-limit-transactions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    margin: 1rem 0;
+}
+#form-limit-transactions select {
+    height: 3.5rem;
+    width : 8rem;
+}
+#form-limit-transactions button {
+    height: 3.5rem;
+    margin-top: 0 !important;  
+}
 @media screen and (min-width: 1200px){
     .overview-card {
         background-color: rgb(var(--light-main-color-rgb), 0.8);

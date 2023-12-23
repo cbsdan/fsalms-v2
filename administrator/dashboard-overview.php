@@ -72,7 +72,7 @@ if (file_exists($function_path)) {
                 </p>
             </div>
             <div class="information">
-                <p class="label">Interest Share: <span class="gray-text small-text fw-600">(Members share / total members)</span></p>
+                <p class="label">Interest Share: </p>
                 <p class="data">
                     <span class="detail">P <?php echo $interestShare = number_format(getMemberInterestsShare($conn), 2); ?> </span>
                 </p>

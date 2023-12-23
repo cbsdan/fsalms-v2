@@ -29,7 +29,7 @@ if (file_exists($database_path)) {
         </div>
         <div class="dashboard nav-container">
             <p class="text">DASHBOARD</p>
-            <div class="nav active" id="d-overview" onclick="loadContent('./administrator/dashboard-overview.php', this)" title="Overview">
+            <div class="nav" id="d-overview" onclick="loadContent('./administrator/dashboard-overview.php', this)" title="Overview">
                 <div class="nav-logo"><img src="./img/overview-icon.png" class="logo"></div>
                 <p class="nav-name">Overview</p>
             </div>
@@ -40,7 +40,7 @@ if (file_exists($database_path)) {
                 <div class="nav-logo"><img src="./img/member-information-icon.png" class="logo"></div>
                 <p class="nav-name">Member Information</p>
             </div>
-            <div class="nav" id="m-transactions" onclick="loadContent('./administrator/member-transactions.php', this)" title="Member Transaction">
+            <div class="nav active" id="m-transactions" onclick="loadContent('./administrator/member-transactions.php', this)" title="Member Transaction">
                 <div class="nav-logo"><img src="./img/member-transactions.png" class="logo"></div>
                 <p class="nav-name">Member Transactions</p>
             </div>

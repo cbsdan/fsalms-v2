@@ -23,15 +23,29 @@ if (isset($_GET['search'])) {
         
 } 
 
-if (isset($_GET['searchValue']) && isset($_GET['searchType'])) {
-    $searchValue = $_SESSION['searchValue'] = $_GET['searchValue'];
-    $searchType = $_SESSION['searchType'] = $_GET['searchType'];
+$limit = 25;
+if (isset($_GET['searchValue']) || isset($_GET['searchType']) || isset($_GET['load-more'])) {
+    if (isset($_GET['searchValue']) && isset($_GET['searchType'])) {
+        $searchValue = $_SESSION['searchValue'] = $_GET['searchValue'];
+        $searchType = $_SESSION['searchType'] = $_GET['searchType'];
+        
+    } else if (isset ($_GET['load-more'])) {
+        $limit = $_SESSION['limit'] = $_GET['select-count'];    
+        
+    } else if (isset($_GET['searchValue']) && isset($_GET['searchType']) && isset($_GET['load-more'])) {
+        $searchValue = $_SESSION['searchValue'] = $_GET['searchValue'];
+        $searchType = $_SESSION['searchType'] = $_GET['searchType'];
+        $limit = $_SESSION['limit'] = $_GET['select-count'];    
+
+    }
 
     $_SESSION['section'] = './administrator/member-transactions.php';
     $_SESSION['activeNavId'] = 'm-transactions';
     header('Location: ../administrator-ui.php');
     exit();
+
 }
+
 
 //DEFAULT SQL COMMAND, IF ADMIN DOESN'T SEARCH AND FILTER ACTIVITY
 $sql = "SELECT * FROM (
@@ -57,7 +71,9 @@ $sql = "SELECT * FROM (
             WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
         ) AS combined_result
 
-        ORDER BY date DESC;";
+        ORDER BY date DESC
+        LIMIT $limit;";
+
 
 //SQL COMMAND IF ADMIN FILTER ACTIVITY, ALL, DEPOSITS, LOAN OR LOAN PAYMENT
 if (isset($_SESSION['activity'])) {
@@ -90,14 +106,52 @@ if (isset($_SESSION['activity'])) {
             WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
         ) AS combined_result
         WHERE activity = '$activity'
-        ORDER BY date DESC;";
+        ORDER BY date DESC
+        LIMIT $limit;";
     }
 }
 
+if (isset($_SESSION['limit'])) {
+    $limit = $_SESSION['limit'];
+    $_SESSION['limit'] = null;
+
+    $sql = "SELECT * FROM (
+        SELECT 'Deposits' as activity, d.deposit_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, d.deposited AS amount, d.deposit_timestamp AS date
+        FROM members m 
+        INNER JOIN accounts a ON a.mem_id = m.mem_id 
+        INNER JOIN deposit d ON d.mem_id = a.mem_id
+
+        UNION 
+
+        SELECT 'Loan Payment' as activity, lp.payment_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, lp.payment_amount AS amount, lp.payment_timestamp AS date
+        FROM members m 
+        INNER JOIN accounts a ON a.mem_id = m.mem_id 
+        INNER JOIN loan_payment lp ON lp.mem_id = m.mem_id
+
+        UNION 
+
+        SELECT 'Loan' as activity, ld.loan_detail_id, m.mem_id, a.profile, CONCAT(m.fname, ' ', m.lname) AS name, m.is_temp_mem, ld.loan_amount AS amount, lr.claimed_timestamp AS date
+        FROM members m 
+        INNER JOIN accounts a ON a.mem_id = m.mem_id 
+        INNER JOIN loan_requests lr ON lr.mem_id = m.mem_id
+        INNER JOIN loan_details ld ON ld.loan_detail_id = lr.loan_detail_id
+        WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
+    ) AS combined_result
+
+    ORDER BY date DESC
+    LIMIT $limit;";
+}
 //SQL COMMAND IF ADMIN SEARCH A MEMBER TRANSACTIONS 
 if (isset($_SESSION['searchValue']) && isset($_SESSION['searchType'])) {
     $searchValue = $_SESSION['searchValue'];
     $searchType = $_SESSION['searchType'];
+
+    $_SESSION['searchValue'] = null;
+    $_SESSION['searchType'] = null;
+
+    if (isset($_SESSION['limit'])) {
+        $limit = $_SESSION['limit'];
+    }
 
     if ($searchValue != '') {
         //searchtype is name
@@ -124,7 +178,8 @@ if (isset($_SESSION['searchValue']) && isset($_SESSION['searchType'])) {
             WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
         ) AS combined_result
         WHERE $searchType LIKE '%$searchValue%'
-        ORDER BY date DESC;";
+        ORDER BY date DESC
+        LIMIT $limit;";
     }
 
 } 
@@ -133,6 +188,14 @@ if (isset($_SESSION['searchValue']) && isset($_SESSION['searchType'])) {
 if (isset($activity) && isset($_SESSION['searchValue']) && isset($_SESSION['searchType'])) {
     $searchType = $_SESSION['searchType'];
     $searchValue = $_SESSION['searchValue'];
+
+    $_SESSION['searchValue'] = null;
+    $_SESSION['searchType'] = null;
+
+    if (isset($_SESSION['limit'])) {
+        $limit = $_SESSION['limit'];
+        $_SESSION['limit'] = null;
+    }
 
     if ($searchValue != '' && $activity != null) {
         $sql = "SELECT * FROM (
@@ -158,7 +221,8 @@ if (isset($activity) && isset($_SESSION['searchValue']) && isset($_SESSION['sear
             WHERE lr.request_status = 'Approved' AND lr.is_claim = 1
         ) AS combined_result
         WHERE activity = '$activity' AND $searchType LIKE '%$searchValue%'
-        ORDER BY date DESC;";
+        ORDER BY date DESC
+        LIMIT $limit;";
     }
 }
 
@@ -229,11 +293,24 @@ $transactions = $conn->query($sql);
                                     </tr>";
                             }
                         } else {
-                            echo "<td colspan='6' class='no-result-label text-center'>No Transaction Found!</td>";
+                            echo "<td colspan='7' class='no-result-label text-center'>No Transaction Found!</td>";
                         }
                     ?>
             </table>
         </div>
+    </div>
+
+    <div class='load-more mt-3'>
+        <form id='form-limit-transactions' action='./administrator/member-transactions.php' method='GET'>
+            <label for='select-count'>Limit Transactions: </label>
+            <select id='select-count' name='select-count'>
+                <option value="25" <?php echo ($limit == '25' ? 'selected' : '')?>>25</option>
+                <option value="50" <?php echo ($limit == '50' ? 'selected' : '')?>>50</option>
+                <option value="100" <?php echo ($limit == '100' ? 'selected' : '')?>>100</option>
+                <option value="10000" <?php echo ($limit == '10000' ? 'selected' : '')?>>All</option>
+            </select>
+            <button type='submit' name='load-more' class='bg-green'>Apply</button>
+        </form>    
     </div>
 </div>
 

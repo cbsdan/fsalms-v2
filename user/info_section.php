@@ -72,6 +72,7 @@ $interest_share = number_format(getMemberInterestsShare($conn), 2);
         </div>
     </div>
 
+    <!--
     <h1 class="interest-title title">Interest Share</h1>
     <hr>
     <div class="interest-container content">
@@ -80,12 +81,13 @@ $interest_share = number_format(getMemberInterestsShare($conn), 2);
             <p class='info t-italic c-gray mt-3'>(This is your share to interest gains from loans)</span></p>
         </div>
     </div>
+    -->
 
     <h1 class="title">System Information</h1>
     <hr>
     <div class="savings-container content">
         <div class="details"> 
-            <p class='info'><span class='label'>Week Number: </span><span class="value"><?php echo $week_number ; ?></span></p>
+            <p class='info'><span class='label'>Week Number: </span><span class="value"><span class='fw-600'><?php echo $week_number ; ?></span><span   > over <?php echo getTotalWeeks($conn)?></span></span></p>
             <p class='info'><span class='label'>Weekly Payment: </span><span class="value">₱ <?php echo $weekly_payment ; ?></span></p>
             <p class='info'><span class='label'>Membership Fee: </span><span class="value">₱ <?php echo $membership_fee ; ?></span></p>
             <p class='info'><span class='label'>Start Date: </span><span class="value"><?php echo $start_date ; ?></span></p>

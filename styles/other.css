@@ -60,13 +60,17 @@ table {
     background-color: var(--input-box-background);
     border-color: var(--light-text);
     border-collapse: collapse;
-    flex: 1 0 auto;
+    flex: 1 1 100%;
+    width: 100%;
 }
 
 .result { /*Table Container*/
     max-height: 400px;
     overflow: auto;
     display: flex;
+    align-items: start;
+    flex: 1;
+    background-color: var(--input-box-background);
 }
 .result::-webkit-scrollbar {
     width: 5px; 
@@ -74,6 +78,7 @@ table {
 .result::-webkit-scrollbar-thumb {
     background-color: rgba(var(--main-color-rgb), 0.6); /* Change the color of the scrollbar thumb */
 }
+
 table thead {
     background-color: var(--main-color);
     color: var(--light-text);
@@ -110,7 +115,9 @@ table td:first-child, table th:first-child{
 table tr td:last-child, table tr th:last-child {
     border-right: none;
 }
-
+table tbody tr:last-child td {
+    border-bottom: 1px solid var(--main-color);
+}
 select {
     padding: 0.5rem 1rem;
     background-color: var(--input-box-background);
